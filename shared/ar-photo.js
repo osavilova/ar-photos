@@ -6,6 +6,8 @@
 //   overlay: 'overlay.png',            // optional: tape / QR drawn above the video
 //   layout:  { width: 3024, height: 3024 },                  // layout PNG size, px
 //   photo:   { x: 330, y: 330, width: 2364, height: 2364 },  // photo area in the layout, px
+//   bleed:   60,                       // optional: px the video extends past each photo edge,
+//                                      // hides the printed photo's edge when tracking is slightly off
 // };
 (function () {
   var cfg = window.AR_PHOTO;
@@ -13,8 +15,9 @@
   // MindAR makes the target 1 unit wide; y grows upwards from the target centre.
   var unit = 1 / cfg.layout.width;
   var targetHeight = cfg.layout.height * unit;
-  var photoW = cfg.photo.width * unit;
-  var photoH = cfg.photo.height * unit;
+  var bleed = cfg.bleed || 0;
+  var photoW = (cfg.photo.width + 2 * bleed) * unit;
+  var photoH = (cfg.photo.height + 2 * bleed) * unit;
   var photoX = (cfg.photo.x + cfg.photo.width / 2) * unit - 0.5;
   var photoY = targetHeight / 2 - (cfg.photo.y + cfg.photo.height / 2) * unit;
 
