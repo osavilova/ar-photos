@@ -8,3 +8,6 @@ ar-*/
 
 # Private instructions for Claude (personal data) — kept only on this Mac
 CLAUDE.md
+
+# Local Claude session config
+.claude/
