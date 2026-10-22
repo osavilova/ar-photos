@@ -1,3 +1,23 @@
 <!doctype html>
-<html lang="uk"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>AR-фото — скоро</title></head>
-<body style="font-family:system-ui;padding:16px;text-align:center"><h1>Скоро тут буде AR-фото ✨</h1></body></html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>23.10.26 — AR-фото</title>
+  <link rel="stylesheet" href="../shared/ar-photo.css">
+  <script src="https://cdn.jsdelivr.net/npm/aframe@1.5.0/dist/aframe-master.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+</head>
+<body>
+  <script>
+    window.AR_PHOTO = {
+      target: 'target.mind',
+      video: 'video.mp4',
+      overlay: 'overlay.png',
+      layout: { width: 3024, height: 3024 },
+      photo: { x: 330, y: 330, width: 2364, height: 2364 }
+    };
+  </script>
+  <script src="../shared/ar-photo.js"></script>
+</body>
+</html>
