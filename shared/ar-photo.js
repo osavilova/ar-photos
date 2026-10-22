@@ -46,8 +46,9 @@
       ' material="shader: flat; transparent: true; alphaTest: 0.01"></a-plane>'
     : '';
 
+  // filterMinCF / filterBeta are MindAR's defaults: stronger smoothing makes the video lag behind the photo.
   document.body.insertAdjacentHTML('beforeend',
-    '<a-scene mindar-image="imageTargetSrc: ' + cfg.target + '; maxTrack: 1; uiScanning: no; filterMinCF: 0.0001; filterBeta: 0.001"' +
+    '<a-scene mindar-image="imageTargetSrc: ' + cfg.target + '; maxTrack: 1; uiScanning: no; filterMinCF: 0.001; filterBeta: 1000"' +
     ' color-space="sRGB" renderer="colorManagement: true" vr-mode-ui="enabled: false"' +
     ' device-orientation-permission-ui="enabled: false">' +
     '  <a-assets timeout="10000">' +
