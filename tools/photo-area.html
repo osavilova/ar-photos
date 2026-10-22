@@ -1,0 +1,42 @@
+<!doctype html>
+<!-- Finds the photo rectangle inside the frame and draws it (pink) with the overlay on top.
+     Open: /tools/photo-area.html?img=work/maket.png&overlay=work/overlay.png
+     Heuristic: the frame is light and near-grey/white, the photo is colourful or dark.
+     Always check the drawing by eye; if the frame is colourful, measure by hand. -->
+<meta charset="utf-8">
+<pre id="out">working…</pre>
+<canvas id="c" style="width:700px;height:auto"></canvas>
+<script>
+  const q = new URLSearchParams(location.search);
+  const load = s => new Promise(r => { const i = new Image(); i.onload = () => r(i); i.src = s; });
+  (async () => {
+    const img = await load(q.get('img'));
+    const W = img.width, H = img.height;
+    const c = document.getElementById('c');
+    c.width = W; c.height = H;
+    const ctx = c.getContext('2d');
+    ctx.drawImage(img, 0, 0);
+    const d = ctx.getImageData(0, 0, W, H).data;
+    const isPhoto = (x, y) => {
+      const k = (y * W + x) * 4, r = d[k], g = d[k + 1], b = d[k + 2];
+      const mx = Math.max(r, g, b), mn = Math.min(r, g, b);
+      return mx - mn > 25 || mx < 150;
+    };
+    // Sample the middle third: share of "photo" pixels per column / row.
+    const x0 = Math.floor(W / 3), x1 = Math.floor(2 * W / 3), y0 = Math.floor(H / 3), y1 = Math.floor(2 * H / 3);
+    const col = [], row = [];
+    for (let x = 0; x < W; x++) { let n = 0, t = 0; for (let y = y0; y < y1; y += 10) { t++; if (isPhoto(x, y)) n++; } col.push(n / t); }
+    for (let y = 0; y < H; y++) { let n = 0, t = 0; for (let x = x0; x < x1; x += 10) { t++; if (isPhoto(x, y)) n++; } row.push(n / t); }
+    const first = a => a.findIndex(v => v > 0.6);
+    const last = a => a.length - 1 - [...a].reverse().findIndex(v => v > 0.6);
+    const L = first(col), R = last(col), T = first(row), B = last(row);
+    const photo = { x: L, y: T, width: R - L + 1, height: B - T + 1 };
+    ctx.fillStyle = 'rgba(255,0,80,0.35)';
+    ctx.fillRect(photo.x, photo.y, photo.width, photo.height);
+    if (q.get('overlay')) ctx.drawImage(await load(q.get('overlay')), 0, 0, W, H);
+    ctx.strokeStyle = '#ff0050'; ctx.lineWidth = Math.max(4, W / 300);
+    ctx.strokeRect(photo.x, photo.y, photo.width, photo.height);
+    document.getElementById('out').textContent =
+      'layout: { width: ' + W + ', height: ' + H + ' },\nphoto: ' + JSON.stringify(photo).replace(/"/g, '').replace(/:/g, ': ').replace(/,/g, ', ');
+  })();
+</script>

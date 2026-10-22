@@ -1,0 +1,17 @@
+<!doctype html>
+<!-- Compiles a MindAR target from the layout PNG as is and saves it to tools/work/target.mind
+     (needs tools/serve.py). Open: /tools/compile.html?img=work/maket.png  — takes ~1 min. -->
+<meta charset="utf-8">
+<pre id="out">loading…</pre>
+<script type="module">
+  import { Compiler } from 'https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image.prod.js';
+  const out = document.getElementById('out');
+  const src = new URLSearchParams(location.search).get('img');
+  const img = await new Promise(r => { const i = new Image(); i.onload = () => r(i); i.src = src; });
+  const t0 = Date.now();
+  const compiler = new Compiler();
+  await compiler.compileImageTargets([img], p => { out.textContent = 'progress ' + p.toFixed(1) + '%'; });
+  const buf = await compiler.exportData();
+  const res = await fetch('/target.mind', { method: 'PUT', body: buf });
+  out.textContent = 'DONE ' + buf.byteLength + ' bytes in ' + ((Date.now() - t0) / 1000) + 's — ' + await res.text();
+</script>

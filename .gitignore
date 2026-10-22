@@ -1,3 +1,5 @@
 *.MOV
 *.mov
 .DS_Store
+tools/work/
+*/test.html
