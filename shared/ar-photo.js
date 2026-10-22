@@ -119,6 +119,7 @@
 
   // No camera (denied, unsupported browser): point people to the plain video.
   scene.addEventListener('arError', function () {
+    document.querySelectorAll('.mindar-ui-overlay').forEach(function (el) { el.style.display = 'none'; });
     hint.textContent = 'Камера недоступна — перегляньте відео окремо';
     openBtn.classList.add('ar-attention');
   });
